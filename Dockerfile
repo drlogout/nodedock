@@ -35,7 +35,6 @@ RUN echo www-data ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/www-data \
 RUN rm -f /etc/nginx/sites-enabled/* && rm -f /etc/nginx/sites-available/*
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/sites-available/ /etc/nginx/sites-available/
-COPY nginx/fastcgi_params /etc/nginx/fastcgi_params
 COPY nginx/mime.types /etc/nginx/mime.types
 COPY nginx/conf.d/ /etc/nginx/conf.d/
 
