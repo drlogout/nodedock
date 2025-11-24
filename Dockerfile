@@ -1,12 +1,7 @@
 FROM ubuntu:24.04
 
-ARG PHP_VERSION=8.3
 ARG NODE_VERSION=22.14
-ENV PHP_VERSION=${PHP_VERSION}
 ENV NODE_VERSION=${NODE_VERSION}
-
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 # Set timezone to UTC
 ENV TZ=Europe/Berlin
@@ -16,6 +11,7 @@ RUN apt update --fix-missing && \
     apt install -y software-properties-common && \
     add-apt-repository ppa:ondrej/php && \
     apt install -y \
+    curl \
     git \
     gosu \
     nginx \
@@ -56,7 +52,6 @@ RUN echo www-data ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/www-data \
     && chmod 0440 /etc/sudoers.d/www-data
 
 USER www-data
-
 RUN curl https://get.volta.sh | bash && \
     /var/www/.volta/bin/volta install node@$NODE_VERSION
 
