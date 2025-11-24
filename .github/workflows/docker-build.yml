@@ -12,16 +12,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php_version: 
-          - '8.3'
-          # - '8.2'
-    
+
     permissions:
       contents: read
       packages: write
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -46,8 +41,10 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
-            type=raw,value=${{ matrix.php_version }}
-            type=raw,value=latest,enable=${{ matrix.php_version == '8.3' }}
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -58,7 +55,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            PHP_VERSION=${{ matrix.php_version }}
             NODE_VERSION=22.14
           cache-from: type=gha
           cache-to: type=gha,mode=max
