@@ -34,6 +34,7 @@ COPY nginx/sites-available/ /etc/nginx/sites-available/
 COPY nginx/mime.types /etc/nginx/mime.types
 COPY nginx/conf.d/ /etc/nginx/conf.d/
 
+
 # Scripts
 COPY scripts/deploy.sh /usr/local/bin/deploy
 

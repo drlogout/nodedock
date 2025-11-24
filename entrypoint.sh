@@ -21,7 +21,14 @@ if [ -n "${USER_ID:-}" ] && [ -n "${GROUP_ID:-}" ]; then
     chown -R www-data:www-data /var/www
 fi
 
-echo "Starting nginx..."
+# Check if REVERSE_PROXY is set to true
+if [ "$REVERSE_PROXY" = "true" ]; then
+    echo "Using reverse proxy configuration..."
+    ln -sf /etc/nginx/sites-available/default.reverse-proxy.conf /etc/nginx/sites-enabled/default
+else
+    echo "Using standard configuration..."
+    ln -sf /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default
+fi
 
 # Start nginx in foreground (runs as root, worker processes as www-data)
 exec nginx -g 'daemon off;'
